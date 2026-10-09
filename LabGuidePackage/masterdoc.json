@@ -3,9 +3,9 @@
     "Name": "Compute Engine Basics",
     "Language": "English",
     "Files": [
-      { "RawFilePath": "https://raw.githubusercontent.com/fardeena-spektra/CosmosDemo/main/compute-engine-basics/LabGuidePackage/LabGuide/GettingStarted-V2.md", "Order": 1 },
-      { "RawFilePath": "https://raw.githubusercontent.com/fardeena-spektra/CosmosDemo/main/compute-engine-basics/LabGuidePackage/LabGuide/Exercise-01.md", "Order": 2 },
-      { "RawFilePath": "https://raw.githubusercontent.com/fardeena-spektra/CosmosDemo/main/compute-engine-basics/LabGuidePackage/LabGuide/Exercise-02.md", "Order": 3 }
+      { "RawFilePath": "https://raw.githubusercontent.com/fardeena-spektra/compute-engine-basics/refs/heads/main/LabGuidePackage/LabGuide/GettingStarted-V2.md", "Order": 1 },
+      { "RawFilePath": "https://raw.githubusercontent.com/fardeena-spektra/compute-engine-basics/refs/heads/main/LabGuidePackage/LabGuide/Exercise-01.md", "Order": 2 },
+      { "RawFilePath": "https://raw.githubusercontent.com/fardeena-spektra/compute-engine-basics/refs/heads/main/LabGuidePackage/LabGuide/Exercise-02.md", "Order": 3 }
     ]
   }
 ]
