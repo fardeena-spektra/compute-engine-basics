@@ -1,0 +1,172 @@
+{
+  "packageId": "55926ef5-7424-4e3a-9e81-bdaf4611727f",
+  "slug": "compute-engine-basics-myWAn",
+  "title": "Compute Engine Basics",
+  "version": 2,
+  "exportedAt": "2026-10-09T10:42:12.384Z",
+  "force": false,
+  "deliverableConfig": {
+    "arm": {
+      "stages": 1,
+      "enabled": true
+    },
+    "cse": {
+      "enabled": true
+    },
+    "rbac": {
+      "enabled": true
+    },
+    "policy": {
+      "enabled": true
+    },
+    "readme": {
+      "enabled": true
+    },
+    "labGuide": {
+      "enabled": true,
+      "exercises": 2
+    },
+    "solution": {
+      "enabled": false
+    },
+    "questions": {
+      "count": 3,
+      "enabled": true
+    },
+    "specSheet": {
+      "enabled": true
+    },
+    "validations": {
+      "count": 3,
+      "enabled": true
+    }
+  },
+  "artifacts": [
+    {
+      "path": "DeploymentPackage/deploy-01.yaml",
+      "kind": "gcp_dm",
+      "lintStatus": "passed"
+    },
+    {
+      "path": "DeploymentPackage/gcp.parameters.yaml",
+      "kind": "template_config",
+      "lintStatus": "passed"
+    },
+    {
+      "path": "DeploymentPackage/param.yaml",
+      "kind": "template_config",
+      "lintStatus": "passed"
+    },
+    {
+      "path": "DeploymentPackage/Scripts/startup-01.sh",
+      "kind": "bash_script",
+      "lintStatus": "passed"
+    },
+    {
+      "path": "Inline-Questions/question-01.md",
+      "kind": "question_md",
+      "lintStatus": "passed"
+    },
+    {
+      "path": "Inline-Questions/question-02.md",
+      "kind": "question_md",
+      "lintStatus": "passed"
+    },
+    {
+      "path": "Inline-Questions/question-03.md",
+      "kind": "question_md",
+      "lintStatus": "passed"
+    },
+    {
+      "path": "LabGuidePackage/LabGuide/Exercise-01.md",
+      "kind": "exercise_md",
+      "lintStatus": "passed"
+    },
+    {
+      "path": "LabGuidePackage/LabGuide/Exercise-02.md",
+      "kind": "exercise_md",
+      "lintStatus": "passed"
+    },
+    {
+      "path": "LabGuidePackage/LabGuide/GettingStarted-V2.md",
+      "kind": "getting_started",
+      "lintStatus": "passed"
+    },
+    {
+      "path": "LabGuidePackage/Lab Guide/Lab Guide/Exercise-01.md",
+      "kind": "exercise_md",
+      "lintStatus": "passed"
+    },
+    {
+      "path": "LabGuidePackage/Lab Guide/Lab Guide/Exercise-02.md",
+      "kind": "exercise_md",
+      "lintStatus": "passed"
+    },
+    {
+      "path": "LabGuidePackage/Lab Guide/Lab Guide/GettingStarted-V2.md",
+      "kind": "getting_started",
+      "lintStatus": "passed"
+    },
+    {
+      "path": "LabGuidePackage/masterdoc.json",
+      "kind": "masterdoc",
+      "lintStatus": "passed"
+    },
+    {
+      "path": "permissions/CustomOrgPolicy/org-policy.json",
+      "kind": "policy_json",
+      "lintStatus": "passed"
+    },
+    {
+      "path": "permissions/CustomRole/custom-role.json",
+      "kind": "rbac_json",
+      "lintStatus": "passed"
+    },
+    {
+      "path": "README.md",
+      "kind": "readme_md",
+      "lintStatus": "passed"
+    },
+    {
+      "path": "Spec.md",
+      "kind": "spec_md",
+      "lintStatus": "passed"
+    },
+    {
+      "path": "Validations/Compute Engine.ps1",
+      "kind": "validation_ps1",
+      "lintStatus": "passed"
+    },
+    {
+      "path": "Validations/Scenario 2 completion file.ps1",
+      "kind": "validation_ps1",
+      "lintStatus": "passed"
+    },
+    {
+      "path": "Validations/Ubuntu VM Configuration.ps1",
+      "kind": "validation_ps1",
+      "lintStatus": "passed"
+    }
+  ],
+  "errors": [],
+  "coherence": [
+    {
+      "severity": "info",
+      "rule": "coherence-validation-step-unmatched",
+      "message": "Validation step \"validation-01\" has no clearly-matching validation script under Validations/. Confirm a backing .ps1/.sh exists.",
+      "artifactPath": "LabGuidePackage/LabGuide/Exercise-01.md"
+    },
+    {
+      "severity": "info",
+      "rule": "coherence-validation-step-unmatched",
+      "message": "Validation step \"validation-01\" has no clearly-matching validation script under Validations/. Confirm a backing .ps1/.sh exists.",
+      "artifactPath": "LabGuidePackage/Lab Guide/Lab Guide/Exercise-01.md"
+    }
+  ],
+  "runnability": {
+    "issues": [],
+    "blocking": 0,
+    "warning": 0,
+    "info": 0
+  }
+}

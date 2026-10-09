@@ -1,0 +1,8 @@
+kind: template_config
+$schema: ''
+contentVersion: 1.0.0.0
+parameters:
+  deploymentId:
+    value: GET-DEPLOYMENT-ID
+  projectId:
+    value: GET-PROJECT-ID

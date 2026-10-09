@@ -1,0 +1,94 @@
+kind: gcp_dm
+resources:
+  - name: clgvpc-@deploymentId
+    type: compute.v1.network
+    properties:
+      autoCreateSubnetworks: false
+
+  - name: clgsubnet-@deploymentId
+    type: compute.v1.subnetwork
+    properties:
+      network: $(ref.clgvpc-@deploymentId.selfLink)
+      ipCidrRange: 10.10.0.0/24
+      region: us-central1
+
+  - name: allow-ssh-@deploymentId
+    type: compute.v1.firewall
+    properties:
+      network: $(ref.clgvpc-@deploymentId.selfLink)
+      direction: INGRESS
+      sourceRanges:
+        - 0.0.0.0/0
+      allowed:
+        - IPProtocol: tcp
+          ports:
+            - 22
+            - 3389
+      targetTags:
+        - ssh
+        - rdp
+
+  - name: labvm-@deploymentId
+    type: compute.v1.instance
+    properties:
+      zone: us-central1-a
+      machineType: zones/us-central1-a/machineTypes/e2-medium
+      disks:
+        - deviceName: boot
+          type: PERSISTENT
+          boot: true
+          autoDelete: true
+          initializeParams:
+            sourceImage: projects/windows-cloud/global/images/family/windows-2022
+            diskSizeGb: 50
+      networkInterfaces:
+        - network: $(ref.clgvpc-@deploymentId.selfLink)
+          subnetwork: $(ref.clgsubnet-@deploymentId.selfLink)
+          accessConfigs:
+            - name: External NAT
+              type: ONE_TO_ONE_NAT
+      tags:
+        items:
+          - ssh
+          - rdp
+      metadata:
+        items:
+          - key: startup-script-ps1
+            value: |
+              # Creates a desktop shortcut for the learner's Google Cloud Console entry point.
+              $ErrorActionPreference = 'Stop'
+              $desktop = [Environment]::GetFolderPath('CommonDesktopDirectory')
+              $shortcutPath = Join-Path $desktop 'Google Cloud Console.lnk'
+              $shell = New-Object -ComObject WScript.Shell
+              $shortcut = $shell.CreateShortcut($shortcutPath)
+              $shortcut.TargetPath = 'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
+              $shortcut.Arguments = 'https://console.cloud.google.com'
+              $shortcut.WorkingDirectory = 'C:\Program Files (x86)\Microsoft\Edge\Application'
+              $shortcut.Description = 'Open Google Cloud Console'
+              $shortcut.Save()
+
+outputs:
+  - name: projectId
+    value: $(projectId)
+  - name: deploymentId
+    value: $(deploymentId)
+  - name: vmName
+    value: labvm-@deploymentId
+  - name: vmPublicIp
+    value: $(ref.labvm-@deploymentId.networkInterfaces[0].accessConfigs[0].natIP)
+  - name: vmPrivateIp
+    value: $(ref.labvm-@deploymentId.networkInterfaces[0].networkIP)
+  - name: vmUsername
+    value: labuser
+  - name: networkName
+    value: clgvpc-@deploymentId
+  - name: networkSelfLink
+    value: $(ref.clgvpc-@deploymentId.selfLink)
+  - name: subnetName
+    value: clgsubnet-@deploymentId
+  - name: subnetSelfLink
+    value: $(ref.clgsubnet-@deploymentId.selfLink)
+  - name: subnetCidr
+    value: 10.10.0.0/24
+  - name: sshTag
+    value: ssh

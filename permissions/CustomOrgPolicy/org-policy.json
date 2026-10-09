@@ -1,0 +1,9 @@
+{
+  "constraint": "constraints/gcp.resourceLocations",
+  "listPolicy": {
+    "allowedValues": [
+      "in:us-central1-locations",
+      "global"
+    ]
+  }
+}

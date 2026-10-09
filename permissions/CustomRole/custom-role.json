@@ -1,0 +1,34 @@
+{
+  "role": {
+    "title": "ComputeEngineBasics-Candidate",
+    "description": "Least-privilege role for the Compute Engine Basics candidate workflow: inspect the lab network and Ubuntu image, create and start ubuntu-vm, and allow metadata-based gcloud compute ssh key propagation. Permission names are grounded in the Google Cloud Compute Engine IAM permissions reference (https://cloud.google.com/compute/docs/access/iam) and gcloud compute ssh documentation (https://cloud.google.com/sdk/gcloud/reference/compute/ssh). No project administration, IAM, or Resource Manager permissions are included.",
+    "stage": "GA",
+    "includedPermissions": [
+      "compute.disks.create",
+      "compute.disks.get",
+      "compute.disks.use",
+      "compute.firewalls.get",
+      "compute.firewalls.list",
+      "compute.globalOperations.get",
+      "compute.images.get",
+      "compute.images.list",
+      "compute.instances.create",
+      "compute.instances.get",
+      "compute.instances.list",
+      "compute.instances.setMetadata",
+      "compute.instances.setTags",
+      "compute.instances.start",
+      "compute.machineTypes.get",
+      "compute.machineTypes.list",
+      "compute.networks.get",
+      "compute.networks.list",
+      "compute.projects.get",
+      "compute.projects.setCommonInstanceMetadata",
+      "compute.subnetworks.get",
+      "compute.subnetworks.list",
+      "compute.subnetworks.use",
+      "compute.zoneOperations.get",
+      "compute.zones.get"
+    ]
+  }
+}
