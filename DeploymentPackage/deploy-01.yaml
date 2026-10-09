@@ -53,19 +53,8 @@ resources:
           - rdp
       metadata:
         items:
-          - key: startup-script-ps1
-            value: |
-              # Creates a desktop shortcut for the learner's Google Cloud Console entry point.
-              $ErrorActionPreference = 'Stop'
-              $desktop = [Environment]::GetFolderPath('CommonDesktopDirectory')
-              $shortcutPath = Join-Path $desktop 'Google Cloud Console.lnk'
-              $shell = New-Object -ComObject WScript.Shell
-              $shortcut = $shell.CreateShortcut($shortcutPath)
-              $shortcut.TargetPath = 'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
-              $shortcut.Arguments = 'https://console.cloud.google.com'
-              $shortcut.WorkingDirectory = 'C:\Program Files (x86)\Microsoft\Edge\Application'
-              $shortcut.Description = 'Open Google Cloud Console'
-              $shortcut.Save()
+          - key: windows-startup-script-url
+            value: https://raw.githubusercontent.com/fardeena-spektra/compute-engine-basics/refs/heads/main/DeploymentPackage/Scripts/startup-01.ps1
 
 outputs:
   - name: projectId
