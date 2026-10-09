@@ -41,7 +41,40 @@ function Get-GceMetadata {
 $ProjectId = Get-GceMetadata 'project/project-id'
 $DeploymentId = Get-GceMetadata 'instance/attributes/deployment-id'
 $LabVmName = Get-GceMetadata 'instance/name'
+$VmPassword = Get-GceMetadata 'instance/attributes/vm-password'
 Write-BootstrapLog "Project=$ProjectId DeploymentId=$DeploymentId Instance=$LabVmName"
+
+# Create or reset the local lab account using the password supplied through
+# the Compute Engine instance metadata attribute. Do not write the password to logs.
+if ($VmPassword) {
+    try {
+        $SecureVmPassword = ConvertTo-SecureString $VmPassword -AsPlainText -Force
+        $LabUser = Get-LocalUser -Name 'labuser' -ErrorAction SilentlyContinue
+        if ($LabUser) {
+            Set-LocalUser -Name 'labuser' -Password $SecureVmPassword -ErrorAction Stop
+            Write-BootstrapLog 'Reset the password for local user labuser.'
+        } else {
+            New-LocalUser -Name 'labuser' -Password $SecureVmPassword -AccountNeverExpires -PasswordNeverExpires -Description 'CloudLabs local lab user' -ErrorAction Stop | Out-Null
+            Write-BootstrapLog 'Created local user labuser.'
+        }
+        Add-LocalGroupMember -Group 'Administrators' -Member 'labuser' -ErrorAction SilentlyContinue
+        Add-LocalGroupMember -Group 'Remote Desktop Users' -Member 'labuser' -ErrorAction SilentlyContinue
+        Write-BootstrapLog 'Ensured labuser is a member of Administrators and Remote Desktop Users.'
+    } catch {
+        Write-BootstrapLog "Local lab user configuration failed: $($_.Exception.Message)"
+    }
+} else {
+    Write-BootstrapLog 'The vm-password metadata attribute was empty; local lab user configuration was skipped.'
+}
+
+# Enable Remote Desktop and its Windows Firewall rule group.
+try {
+    Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server' -Name 'fDenyTSConnections' -Value 0 -Type DWord -Force -ErrorAction Stop
+    Enable-NetFirewallRule -DisplayGroup 'Remote Desktop' -ErrorAction Stop
+    Write-BootstrapLog 'Enabled Remote Desktop and the Windows Firewall Remote Desktop group.'
+} catch {
+    Write-BootstrapLog "Remote Desktop configuration failed: $($_.Exception.Message)"
+}
 
 # Locate the lab-standard Google Cloud CLI installation and make it available now
 # and to subsequent interactive PowerShell sessions.
