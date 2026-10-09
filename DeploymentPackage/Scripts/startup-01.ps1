@@ -1,8 +1,3 @@
-param(
-    [string]$AzureUserName,
-    [string]$AzurePassword
-)
-
 # CloudLabs Stage 1 Windows lab VM startup script.
 # Runs as LocalSystem during Compute Engine startup and is safe to run again.
 
@@ -65,6 +60,22 @@ if (-not $Gcloud) {
     if ($GcloudCommand) { $Gcloud = $GcloudCommand.Source }
 }
 
+if (-not $Gcloud) {
+    $InstallerPath = Join-Path $env:TEMP 'GoogleCloudSDKInstaller.exe'
+    try {
+        Invoke-WebRequest -Uri 'https://dl.google.com/dl/cloudsdk/channels/rapid/GoogleCloudSDKInstaller.exe' -OutFile $InstallerPath -UseBasicParsing -ErrorAction Stop
+        Start-Process -FilePath $InstallerPath -ArgumentList '/S', '/allusers', '/noreporting' -Wait -WindowStyle Hidden -ErrorAction SilentlyContinue | Out-Null
+    } catch {
+        Write-BootstrapLog "gcloud installation failed: $($_.Exception.Message)"
+    }
+    $Gcloud = $GcloudCandidates | Where-Object { $_ -and (Test-Path -LiteralPath $_) } | Select-Object -First 1
+    if (-not $Gcloud) {
+        $GcloudCommand = Get-Command gcloud.cmd -ErrorAction SilentlyContinue
+        if (-not $GcloudCommand) { $GcloudCommand = Get-Command gcloud.exe -ErrorAction SilentlyContinue }
+        if ($GcloudCommand) { $Gcloud = $GcloudCommand.Source }
+    }
+}
+
 $GcloudDirectory = ''
 if ($Gcloud) {
     $GcloudDirectory = Split-Path -Parent $Gcloud
@@ -78,35 +89,7 @@ if ($Gcloud) {
     }
     Write-BootstrapLog 'gcloud is available and the provided project is configured.'
 } else {
-    Write-BootstrapLog 'gcloud was not found; the lab-standard installation remains available for repair on first sign-in.'
-}
-
-# Create the non-admin local profile and a protected, non-secret context file.
-$LabUser = 'labuser'
-$LabHome = Join-Path $env:SystemDrive "Users\$LabUser"
-if (-not (Get-LocalUser -Name $LabUser -ErrorAction SilentlyContinue)) {
-    $Password = ConvertTo-SecureString (([Guid]::NewGuid().ToString('N')) + 'aA!') -AsPlainText -Force
-    New-LocalUser -Name $LabUser -Password $Password -Description 'CloudLabs lab user' -PasswordNeverExpires -UserMayNotChangePassword | Out-Null
-}
-New-Item -ItemType Directory -Path $LabHome -Force | Out-Null
-$CredsFile = Join-Path $LabHome 'cloudlabs-creds.env'
-@(
-    "PROJECT_ID=$ProjectId"
-    "DEPLOYMENT_ID=$DeploymentId"
-    "LAB_VM_NAME=$LabVmName"
-) | Set-Content -LiteralPath $CredsFile -Encoding ASCII
-
-try {
-    $Acl = Get-Acl -LiteralPath $CredsFile
-    $Acl.SetAccessRuleProtection($true, $false)
-    $Acl.Access | ForEach-Object { $Acl.RemoveAccessRule($_) | Out-Null }
-    $Acl.AddAccessRule((New-Object System.Security.AccessControl.FileSystemAccessRule(
-        "$env:COMPUTERNAME\$LabUser", 'Read', 'Allow')))
-    $Acl.AddAccessRule((New-Object System.Security.AccessControl.FileSystemAccessRule(
-        'SYSTEM', 'FullControl', 'Allow')))
-    Set-Acl -LiteralPath $CredsFile -AclObject $Acl
-} catch {
-    Write-BootstrapLog "Could not apply credentials-file ACL: $($_.Exception.Message)"
+    Write-BootstrapLog 'gcloud was not found and could not be installed.'
 }
 
 # Put a Microsoft Edge shortcut on the desktop shared by all users.
