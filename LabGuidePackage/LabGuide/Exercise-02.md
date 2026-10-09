@@ -14,7 +14,7 @@ scenario 2 is completed
 
 The SSH firewall rule and the VM's ephemeral external IPv4 address are provided for this lab. Allowing TCP port 22 from the internet is intentionally simplified **lab-only access**; do not use this design for a production VM.
 
-Your CloudLabs deployment ID is <inject key="DeploymentID"></inject>. The project used by this exercise is <inject key="GcpProjectId"></inject>.
+Your CloudLabs deployment ID is <inject key="DeploymentID"></inject>. The project used by this exercise is <inject key="projectId"></inject>.
 
 ## Sign in and open the lab VM
 
@@ -22,7 +22,7 @@ Your CloudLabs deployment ID is <inject key="DeploymentID"></inject>. The projec
 2. If you need to sign in to the Google Cloud console, open Microsoft Edge from the desktop shortcut and go to <https://console.cloud.google.com>. Use the credentials supplied for this lab:
    - Email: <inject key="GcpUserEmail"></inject>
    - Password: <inject key="GcpUserPassword"></inject>
-3. In the Google Cloud console, select project <inject key="GcpProjectId"></inject>. Leave the console available so you can review the `ubuntu-vm` external IP and status if SSH troubleshooting is needed.
+3. In the Google Cloud console, select project <inject key="projectId"></inject>. Leave the console available so you can review the `ubuntu-vm` external IP and status if SSH troubleshooting is needed.
 4. On `labvm`, open **PowerShell**. Confirm that `gcloud` is installed and set the active project to the lab-provided project:
 
 ```powershell
@@ -32,7 +32,7 @@ gcloud config set project PROJECT_ID
 gcloud config get-value project
 ```
 
-Replace `PROJECT_ID` in the command with the project ID displayed above. The final command should print the provided project ID. If `gcloud auth list` does not show an authenticated account, use the authentication procedure provided by your CloudLabs environment before continuing.
+Replace `PROJECT_ID` in the command with the project ID displayed above. The final command should print the provided project ID. If `gcloud auth list` does not show an authenticated account, run gcloud auth login and sign in with the lab GCP account shown above before continuing.
 
 ## Task 1: Connect to `ubuntu-vm` with gcloud SSH
 
@@ -89,7 +89,7 @@ exit
 
 The completion artifact is now in the home directory reported by `whoami` and `$HOME`; the guide intentionally does not assume a username.
 
-<question id="question-03"/>
+<validation step="33ebd7b5-b3fc-4ede-b04c-d90b7ab88bc8" />
 
 ## Troubleshooting SSH readiness
 
@@ -97,8 +97,7 @@ The completion artifact is now in the home directory reported by `whoami` and `$
 
 1. In the Google Cloud console, open **Compute Engine > VM instances**, select `ubuntu-vm`, and confirm that its zone is `us-central1-a` and its status is **Running**.
 2. On the VM details page, confirm that an **External IPv4 address** is present. This exercise uses the normal external-IP SSH path from `labvm`; do not add `--internal-ip`.
-3. Confirm that the VM was created with the network tag expected by the lab's pre-provisioned TCP/22 firewall rule. The rule is intentionally scoped to the learner VM tag where practical.
-4. If the VM is running and the external IP is present, retry after a short wait for guest startup and firewall programming to complete. From PowerShell, the supported diagnostic form is:
+3. If the VM is running and the external IP is present, retry after a short wait for guest startup and firewall programming to complete. From PowerShell, the supported diagnostic form is:
 
 ```powershell
 gcloud compute ssh ubuntu-vm --zone=us-central1-a --troubleshoot
@@ -130,8 +129,5 @@ The active identity must have access to the provided project and the VM must rep
 - [ ] Verified the filename, location, line count, and content.
 - [ ] Exited the SSH session.
 
-## References
-
-- [Google Cloud CLI: gcloud compute ssh](https://cloud.google.com/sdk/gcloud/reference/compute/ssh) — command syntax, zone selection, SSH key handling, and `--troubleshoot`.
-- [Connect to Linux VMs using gcloud](https://cloud.google.com/compute/docs/connect/standard-ssh) — standard Compute Engine SSH workflow and connection requirements.
-- [VPC firewall rules](https://cloud.google.com/firewall/docs/firewalls) — ingress firewall behavior and TCP port rules.
+<question source="../../Inline-Questions/question-02.md" />
+<question source="../../Inline-Questions/question-03.md" />
