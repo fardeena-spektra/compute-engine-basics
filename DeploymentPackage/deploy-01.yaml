@@ -1,8 +1,3 @@
-kind: gcp_dm
-parameters:
-  - name: vmPassword
-    type: string
-    description: Password for the lab VM
 resources:
   - name: clgvpc-@deploymentId
     type: compute.v1.network
@@ -77,10 +72,10 @@ outputs:
   - name: networkName
     value: clgvpc-@deploymentId
   - name: networkSelfLink
-    value: $(ref.clgvpc-@deploym
-    value: clgsubnet-@deploymentId
-  - name: subnetSelfLinkentId.selfLink)
+    value: $(ref.clgvpc-@deploymentId.selfLink)
   - name: subnetName
+    value: clgsubnet-@deploymentId
+  - name: subnetSelfLink
     value: $(ref.clgsubnet-@deploymentId.selfLink)
   - name: subnetCidr
     value: 10.10.0.0/24
