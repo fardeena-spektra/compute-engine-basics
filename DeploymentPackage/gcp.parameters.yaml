@@ -6,3 +6,5 @@ parameters:
     value: GET-DEPLOYMENT-ID
   projectId:
     value: GET-PROJECT-ID
+  vmPassword:
+    value: GEN-PASSWORD
