@@ -1,4 +1,8 @@
 kind: gcp_dm
+parameters:
+  - name: vmPassword
+    type: string
+    description: Password for the lab VM
 resources:
   - name: clgvpc-@deploymentId
     type: compute.v1.network
@@ -23,10 +27,9 @@ resources:
         - IPProtocol: tcp
           ports:
             - 22
+            - 80
+            - 443
             - 3389
-      targetTags:
-        - ssh
-        - rdp
 
   - name: labvm-@deploymentId
     type: compute.v1.instance
@@ -55,6 +58,8 @@ resources:
         items:
           - key: windows-startup-script-url
             value: https://raw.githubusercontent.com/fardeena-spektra/compute-engine-basics/refs/heads/main/DeploymentPackage/Scripts/startup-01.ps1
+          - key: vm-password
+            value: $(vmPassword)
 
 outputs:
   - name: projectId
@@ -72,12 +77,18 @@ outputs:
   - name: networkName
     value: clgvpc-@deploymentId
   - name: networkSelfLink
-    value: $(ref.clgvpc-@deploymentId.selfLink)
-  - name: subnetName
+    value: $(ref.clgvpc-@deploym
     value: clgsubnet-@deploymentId
-  - name: subnetSelfLink
+  - name: subnetSelfLinkentId.selfLink)
+  - name: subnetName
     value: $(ref.clgsubnet-@deploymentId.selfLink)
   - name: subnetCidr
     value: 10.10.0.0/24
   - name: sshTag
     value: ssh
+  - name: vmPassword
+    value: $(vmPassword)
+  - name: networkId
+    value: $(ref.clgvpc-@deploymentId.id)
+  - name: subnetId
+    value: $(ref.clgsubnet-@deploymentId.id)
