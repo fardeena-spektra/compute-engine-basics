@@ -19,7 +19,6 @@ The VM you create must have these values:
 | Network | Deployment-specific lab VPC network shown in your lab outputs |
 | Subnet | Deployment-specific subnet in `us-central1`, with CIDR `10.10.0.0/24` |
 | External IPv4 address | Ephemeral |
-| Network tag | The SSH tag shown in your lab outputs; it must match the pre-provisioned TCP/22 firewall rule |
 | State after creation | Running |
 
 The network and firewall dependencies are already provisioned. Do not create a second network or firewall rule in this exercise.
@@ -32,7 +31,7 @@ The network and firewall dependencies are already provisioned. Do not create a s
 2. Sign in with the provided training account:
    - Email: <inject key="GcpUserEmail"></inject>
    - Password: <inject key="GcpUserPassword"></inject>
-3. In the project selector at the top of the console, select project <inject key="GcpProjectId"></inject>.
+3. In the project selector at the top of the console, select project <inject key="projectId"></inject>.
 4. Confirm that the CloudLabs deployment identifier is <inject key="DeploymentID" enableCopy="false"></inject>.
 5. Verify that the selected project is the provided lab project before creating any resource. If the console shows a different project, use the project selector again.
 
@@ -53,14 +52,13 @@ The network and firewall dependencies are already provisioned. Do not create a s
 
 > **Image verification:** The console can present a versioned image from the Ubuntu LTS family. The requirement is the latest Ubuntu LTS available when you perform the exercise, not a hard-coded version string. Record the image family/version shown in the final instance details for your verification.
 
-## Task 4: Configure the deployment network, ephemeral IP, and SSH tag
+## Task 4: Configure the deployment network and ephemeral IP
 
 1. Expand **Advanced options**, then expand **Networking** if those sections are collapsed.
 2. In the network interface configuration, select the deployment-specific lab VPC network and its subnet in `us-central1`. Use the exact network and subnet values exposed in the CloudLabs deployment outputs for deployment <inject key="DeploymentID" enableCopy="false"></inject>; do not substitute `default` or invent a name.
 3. Confirm that the selected subnet has the lab CIDR `10.10.0.0/24`.
 4. For **External IPv4 address**, leave or select **Ephemeral**. Do not reserve or attach a static address.
-5. In **Network tags**, enter the SSH tag supplied by the deployment outputs. Use the exact tag expected by the pre-provisioned TCP/22 firewall rule, and do not add unrelated tags.
-6. Review the remaining settings. Leave the VM configured to start normally after creation; do not select an option that prevents the instance from starting.
+5. Review the remaining settings. Leave the VM configured to start normally after creation; do not select an option that prevents the instance from starting.
 
 ## Task 5: Create and verify `ubuntu-vm`
 
@@ -74,30 +72,19 @@ The network and firewall dependencies are already provisioned. Do not create a s
    - The network interface uses the deployment-specific VPC and subnet.
    - The subnet is the `10.10.0.0/24` lab subnet.
    - The external IPv4 address is present and is ephemeral.
-   - The network tags include the required SSH tag.
    - The VM status is **Running**.
 4. Record the displayed external IPv4 address. You will use it as a connectivity reference in Exercise 2; do not convert it to a static address.
 5. If any setting is wrong, stop before Exercise 2. Use **Edit** on the instance to correct the setting, then return to the instance details page and verify again.
 
 ![VM instance details placeholder](./media/exercise-01-vm-details.png)
 
-<question>
-Which configuration is the valid target for `ubuntu-vm`? Select the option containing zone `us-central1-a`, machine type `e2-micro`, the latest Ubuntu LTS image, the deployment-specific `us-central1` subnet with CIDR `10.10.0.0/24`, an ephemeral external IPv4 address, and the SSH network tag expected by the pre-provisioned TCP/22 rule.
-</question>
+<validation step="ade993bb-6fdc-438c-8b21-b73e58f84c77" />
+<validation step="4cef71f3-08c9-466c-a5fa-2d9da459e82a" />
 
-<validation step="validation-01"/>
+<question source="../../Inline-Questions/question-01.md" />
 
 ## Troubleshooting
 
-- **The network or subnet is not listed:** Confirm that the project selector shows <inject key="GcpProjectId"></inject>. If it is correct, return to the CloudLabs deployment outputs and use the exact network and subnet identifiers provided there; do not use the default network.
+- **The network or subnet is not listed:** Confirm that the project selector shows <inject key="projectId"></inject>. If it is correct, return to the CloudLabs deployment outputs and use the exact network and subnet identifiers provided there; do not use the default network.
 - **The VM does not become Running:** Wait for the creation operation to finish, refresh **VM instances**, and inspect the operation or instance error message. A VM that is stopped or suspended does not meet this exercise's requirement.
 - **No external IPv4 address appears:** Edit the network interface and select an **Ephemeral** external IPv4 address, then save and verify the instance details again. Do not reserve a static address.
-- **SSH tag or firewall readiness is uncertain:** Check the exact SSH tag in the deployment outputs and the VM's **Network tags** field. The firewall dependency is pre-provisioned; do not create a duplicate rule.
-
-## Sources
-
-The console choices and verification model in this exercise are aligned with the Google Cloud documentation surfaced through the documentation reference:
-
-- [Create and configure a Compute Engine VM](https://docs.cloud.google.com/apigee/docs/api-platform/get-started/accessing-internal-proxies) — machine type, zone, subnet, image, and network tag fields used by Compute Engine VM creation.
-- [Google Cloud documentation samples](https://docs.cloud.google.com/docs/samples) — Compute Engine image-family/version behavior and VM configuration examples.
-- [Google Cloud firewall documentation](https://docs.cloud.google.com/firewall/docs) — firewall rules and tag-scoped traffic behavior.
